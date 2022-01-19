@@ -1,6 +1,11 @@
 # Meals app
 
-A Flutter project developed by Mithilesh Ghadge while undertaking Flutter and Dart Course.
+A Flutter project created by Mithilesh Ghadge in a Fluttter Android app development course on Udemy.
+
+- 👋 Hi, I’m Mithilesh Ghadge
+- Passionate Coder from India
+- Instagram : https://www.instagram.com/mithileshghadge/
+- Facebook : https://www.facebook.com/mitilesh.ghadge
 
 ## Getting Started
 
