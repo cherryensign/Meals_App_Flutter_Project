@@ -1,6 +1,6 @@
-# mealsapp
+# Meals app
 
-A new Flutter project.
+A Flutter project developed by Mithilesh Ghadge while undertaking Flutter and Dart Course.
 
 ## Getting Started
 
