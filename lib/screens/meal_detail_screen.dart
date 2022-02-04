@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import '/dummy_data.dart';
+
+import '../dummy_data.dart';
 
 class MealDetailScreen extends StatelessWidget {
   static const routeName = '/meal-detail';
+
+  final Function toggleFavorite;
+  final Function isFavorite;
+
+  MealDetailScreen(this.toggleFavorite, this.isFavorite);
 
   Widget buildSectionTitle(BuildContext context, String text) {
     return Container(
@@ -14,16 +20,18 @@ class MealDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget buildContainer(BuildContext context, Widget childw) {
+  Widget buildContainer(Widget child) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(10)),
-      height: 200,
-      width: MediaQuery.of(context).size.width - 30,
-      child: childw,
+        color: Colors.white,
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
+      height: 150,
+      width: 300,
+      child: child,
     );
   }
 
@@ -37,7 +45,7 @@ class MealDetailScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <Widget>[
             Container(
               height: 300,
               width: double.infinity,
@@ -46,50 +54,48 @@ class MealDetailScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            buildSectionTitle(context, 'Ingredients:'),
+            buildSectionTitle(context, 'Ingredients'),
             buildContainer(
-              context,
               ListView.builder(
                 itemBuilder: (ctx, index) => Card(
+                  color: Theme.of(context).accentColor,
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    child: Column(
-                      children: [
-                        Text(selectedMeal.ingredients[index]),
-                        Divider(),
-                      ],
-                    ),
-                  ),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 10,
+                      ),
+                      child: Text(selectedMeal.ingredients[index])),
                 ),
                 itemCount: selectedMeal.ingredients.length,
               ),
             ),
-            buildSectionTitle(context, 'Steps:'),
+            buildSectionTitle(context, 'Steps'),
             buildContainer(
-                context,
-                ListView.builder(
-                  padding: EdgeInsets.all(5),
-                  itemCount: selectedMeal.steps.length,
-                  itemBuilder: (ctx, index) => Column(
-                    children: [
-                      ListTile(
-                        leading: CircleAvatar(
-                          child: Text('#${(index + 1)}'),
-                        ),
-                        title: Text(selectedMeal.steps[index]),
+              ListView.builder(
+                itemBuilder: (ctx, index) => Column(
+                  children: [
+                    ListTile(
+                      leading: CircleAvatar(
+                        child: Text('# ${(index + 1)}'),
                       ),
-                      Divider(),
-                    ],
-                  ),
-                )),
+                      title: Text(
+                        selectedMeal.steps[index],
+                      ),
+                    ),
+                    Divider()
+                  ],
+                ),
+                itemCount: selectedMeal.steps.length,
+              ),
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.no_meals),
-        onPressed: () {
-          Navigator.of(context).pop(mealId);
-        },
+        child: Icon(
+          isFavorite(mealId) ? Icons.star : Icons.star_border,
+        ),
+        onPressed: () => toggleFavorite(mealId),
       ),
     );
   }

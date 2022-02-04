@@ -1,6 +1,16 @@
-enum Complexity { Simple, Challenging, Hard }
+import 'package:flutter/foundation.dart';
 
-enum Affordability { Affordable, Pricey, Luxurious }
+enum Complexity {
+  Simple,
+  Challenging,
+  Hard,
+}
+
+enum Affordability {
+  Affordable,
+  Pricey,
+  Luxurious,
+}
 
 class Meal {
   final String id;
