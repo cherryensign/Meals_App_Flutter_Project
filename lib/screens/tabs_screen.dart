@@ -58,12 +58,12 @@ class _TabsScreenState extends State<TabsScreen> {
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.category),
-            title: const Text('Categories'),
+            label: 'Categories',
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: const Icon(Icons.star),
-            title: const Text('Favorites'),
+            label: 'Favorites',
           ),
         ],
       ),
