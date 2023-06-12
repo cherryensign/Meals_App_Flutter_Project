@@ -1,160 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
-import '../screens/meal_detail_screen.dart';
-import '../models/meal.dart';
+import '/widgets/meal_item_trait.dart';
+import '/models/meal.dart';
 
 class MealItem extends StatelessWidget {
-  final String id;
-  final String title;
-  final String imageUrl;
-  final int duration;
-  final Complexity complexity;
-  final Affordability affordability;
-
-  MealItem({
-    required this.id,
-    required this.title,
-    required this.imageUrl,
-    required this.affordability,
-    required this.complexity,
-    required this.duration,
+  const MealItem({
+    required this.meal,
+    required this.onSelectMeal,
   });
 
+  final Meal meal;
+  final void Function(Meal meal) onSelectMeal;
+
   String get complexityText {
-    switch (complexity) {
-      case Complexity.Simple:
-        return 'Simple';
-        break;
-      case Complexity.Challenging:
-        return 'Challenging';
-        break;
-      case Complexity.Hard:
-        return 'Hard';
-        break;
-      default:
-        return 'Unknown';
-    }
+    return meal.complexity.name[0].toUpperCase() +
+        meal.complexity.name.substring(1);
   }
 
   String get affordabilityText {
-    switch (affordability) {
-      case Affordability.Affordable:
-        return 'Affordable';
-        break;
-      case Affordability.Pricey:
-        return 'Pricey';
-        break;
-      case Affordability.Luxurious:
-        return 'Expensive';
-        break;
-      default:
-        return 'Unknown';
-    }
-  }
-
-  void selectMeal(BuildContext context) {
-    Navigator.of(context)
-        .pushNamed(
-      MealDetailScreen.routeName,
-      arguments: id,
-    )
-        .then((result) {
-      if (result != null) {
-        // removeItem(result);
-      }
-    });
+    return meal.affordability.name[0].toUpperCase() +
+        meal.affordability.name.substring(1);
   }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => selectMeal(context),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        elevation: 4,
-        margin: EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
-                  ),
-                  child: Image.network(
-                    imageUrl,
-                    height: 250,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Positioned(
-                  bottom: 20,
-                  right: 10,
-                  child: Container(
-                    width: 300,
-                    color: Colors.black54,
-                    padding: EdgeInsets.symmetric(
-                      vertical: 5,
-                      horizontal: 20,
-                    ),
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 26,
+    return Card(
+      margin: const EdgeInsets.all(8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      clipBehavior: Clip.hardEdge,
+      elevation: 2,
+      child: InkWell(
+        onTap: () {
+          onSelectMeal(meal);
+        },
+        child: Stack(
+          children: [
+            FadeInImage(
+              placeholder: MemoryImage(kTransparentImage),
+              image: NetworkImage(meal.imageUrl),
+              fit: BoxFit.cover,
+              height: 200,
+              width: double.infinity,
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                color: Colors.black54,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 6, horizontal: 44),
+                child: Column(
+                  children: [
+                    Text(
+                      meal.title,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis, // Very long text ...
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
-                      softWrap: true,
-                      overflow: TextOverflow.fade,
                     ),
-                  ),
-                )
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.schedule,
-                      ),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Text('$duration min'),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.work,
-                      ),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Text(complexityText),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.attach_money,
-                      ),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      Text(affordabilityText),
-                    ],
-                  ),
-                ],
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        MealItemTrait(
+                          icon: Icons.schedule,
+                          label: '${meal.duration} min',
+                        ),
+                        const SizedBox(width: 12),
+                        MealItemTrait(
+                          icon: Icons.work,
+                          label: complexityText,
+                        ),
+                        const SizedBox(width: 12),
+                        MealItemTrait(
+                          icon: Icons.attach_money,
+                          label: affordabilityText,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
+            )
           ],
         ),
       ),
